@@ -23,16 +23,9 @@ router.post("/", async (req: Request, res: Response) => {
     try {
         const { error } = validate(req.body)
         console.log(error);
+        
         if (error) return res.status(400).send({ message: "Bad request" });
-
-        console.log(req.body);
-
-        console.log("before newProfile");
-
         const newProfile: IProfile = new Profile(req.body);
-
-        console.log("before save profile");
-
 
         await newProfile.save()
 
@@ -42,6 +35,18 @@ router.post("/", async (req: Request, res: Response) => {
 
     } catch (error) {
         return error
+    }
+})
+
+router.delete("/:id", async (req: Request, res: Response) => {
+    try {
+        const profile = await Profile.findByIdAndDelete(req.params.id);
+        if (!profile) return res.status(404).send({ message: "Profile not found" });
+
+        res.send({ message: "Profile deleted" })
+        return true
+    } catch (error) {
+        return error;
     }
 })
 
