@@ -36,7 +36,7 @@ router.post("/", async (req: Request, res: Response) => {
 
         await newProfile.save()
 
-        res.send({message: "Profile created"})
+        res.send({ message: "Profile created" })
 
         return true
 
