@@ -47,7 +47,8 @@ router.delete("/:id", async (req: Request, res: Response) => {
     res.send({ message: "Profile deleted" });
     return true;
   } catch (error) {
-    return error;
+    handleApiError(error);
+    return false;
   }
 });
 
