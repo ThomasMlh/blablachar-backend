@@ -1,16 +1,48 @@
 import { Document } from "mongoose";
 
-export interface IProfile extends Document {
-    _id?: string;
+export interface ITrip extends Document {
+    _id?: string,
     departure: string,
     arrival: string,
     day_departure: string,
     month_departure: string,
     name: string,
     price: number,
+    char: IChar,
+    profile: IProfile,
+}
+
+export interface IChar extends Document {
+    _id?: string,
+    horses: number,
+    speed: number,
     seats: number,
-    char_model: string,
+    rate: number,
     luggage: number,
-    char_image: string,
-    char_name: string
+    name: string,
+    image: string,
+}
+
+
+export interface IProfile extends Document {
+    _id?: string,
+    name: string,
+    age: number,
+    description: string,
+    trips_made: number,
+    trips_achieved: number,
+    quality: string[],
+    image: string,
+    rate: number,
+    char: IChar,
+    comments: [IComment]
+}
+
+export interface IComment extends Document {
+    _id?: string,
+    comment: string,
+    author: {
+        id: string,
+        name: string,
+    },
 }

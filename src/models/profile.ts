@@ -1,64 +1,70 @@
 import mongoose, { Schema } from "mongoose";
 import { IProfile } from "../types";
 import Joi from "joi";
+import { charSchema } from "./char";
 
 export const profileSchema = new Schema({
-    departure: {
-        type: String,
-        minlength: 2
-    },
-    arrival: {
-        type: String,
-        minlength: 2
-    },
-    day_departure: {
-        type: String,
-        minlength: 2
-    },
-    month_departure: {
-        type: String,
-        minlength: 2
-    },
     name: {
         type: String,
-        minlength: 2
     },
-    price: {
+    age: {
         type: Number,
     },
-    seats: {
+    description: {
+        type: String,
+    },
+    trips_made: {
         type: Number,
     },
-    char_model: {
-        type: String,
-        minlength: 2
-    },
-    luggage: {
+    trips_achieved: {
         type: Number,
     },
-    char_image: {
+    quality: {
+        type: [String],
+    },
+    image: {
         type: String,
     },
-    char_name: {
-        type: String,
-    }
-})
+    rate: {
+        type: Number,
+    },
+    char: {
+        type: charSchema,
+    },
+    comments: {
+        type: [Schema.Types.ObjectId],
+        ref: "Comment",
+    },
+});
 
 export const Profile = mongoose.model<IProfile>("Profile", profileSchema);
 
 export const validateProfile = (profile: IProfile) => {
     const schema = Joi.object({
-        departure: Joi.string().min(2).required(),
-        arrival: Joi.string().min(2).required(),
-        day_departure: Joi.string().min(2).required(),
-        month_departure: Joi.string().min(2).required(),
         name: Joi.string().min(2).required(),
-        price: Joi.number().required(),
-        seats: Joi.number().required(),
-        char_model: Joi.string().min(2).required(),
-        luggage: Joi.number().required(),
-        char_image: Joi.string().required(),
-        char_name: Joi.string().required(),
+        age: Joi.number().required(),
+        description: Joi.string().min(2).required(),
+        trips_made: Joi.number().required(),
+        trips_achieved: Joi.number().required(),
+        quality: Joi.array().items(Joi.string().min(2).required()),
+        image: Joi.string().required(),
+        rate: Joi.number().required(),
+        char: Joi.object({
+            horses: Joi.number().required(),
+            speed: Joi.number().required(),
+            seats: Joi.number().required(),
+            rate: Joi.number().required(),
+            luggage: Joi.number().required(),
+            name: Joi.string().min(2).required(),
+            image: Joi.string().required(),
+        }),
+        comments: Joi.array().items(Joi.object({
+            comment: Joi.string().min(2).required(),
+            author: Joi.object({
+                name: Joi.string().min(2).required(),
+                id: Joi.string().required(),
+            })
+        }))
     });
     return schema.validate(profile)
 }
